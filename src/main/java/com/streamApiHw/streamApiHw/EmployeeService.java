@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
+
     private Map<String, Employee> employeeMap;
     private final int maxEmployeesCount;
 
@@ -52,4 +53,5 @@ public class EmployeeService {
                 .filter(employee -> employee.getDepartment().equals(department))
                 .collect(Collectors.toList());
     }
+
 }

@@ -12,6 +12,7 @@ public class Employee {
         this.salary = salary;
         this.department = department;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -42,5 +43,9 @@ public class Employee {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public int getDepartmentId() {
+        return 0;
     }
 }
