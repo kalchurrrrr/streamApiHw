@@ -30,7 +30,7 @@ public class DepartmentService {
 
         BigDecimal salarySum = employees.stream()
                 .map(Employee::getSalary)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
 
         return salarySum;
     }
