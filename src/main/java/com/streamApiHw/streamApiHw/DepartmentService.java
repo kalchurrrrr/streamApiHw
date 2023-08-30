@@ -17,11 +17,15 @@ public class DepartmentService {
     }
 
     public double getDepartmentSalarySum(String departmentId) {
+        if (departmentId == null || departmentId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Необходимо предоставить идентификационный номер отдела");
+        }
         List<Employee> employees = getEmployeesByDepartment(departmentId);
         return employees.stream()
                 .mapToDouble(Employee::getSalary)
                 .sum();
     }
+
 
     public Employee getEmployeeWithMaxSalary(String departmentId) {
         List<Employee> employees = getEmployeesByDepartment(departmentId);

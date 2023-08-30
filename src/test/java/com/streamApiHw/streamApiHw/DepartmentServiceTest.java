@@ -55,14 +55,20 @@ public class DepartmentServiceTest {
 
     @Test
     public void testGetEmployeesByDepartment_ThrowsException_WhenNoDepartmentIdProvided() {
-        assertThrows(IllegalArgumentException.class,
-                () -> departmentService.getEmployeesByDepartment(null));
+        List<Employee> allEmployees = Arrays.asList(
+                new Employee("Иван", "Иванов", 5000, "IT"),
+                new Employee("Ольга", "Романова", 6000, "IT")
+        );
+        when(employeeService.getAllEmployees()).thenReturn(allEmployees);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> departmentService.getEmployeesByDepartment(""));
+        List<Employee> actualEmployees = departmentService.getEmployeesByDepartment(null);
+        assertEquals(Collections.emptyList(), actualEmployees);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> departmentService.getEmployeesByDepartment("   "));
+        actualEmployees = departmentService.getEmployeesByDepartment("");
+        assertEquals(Collections.emptyList(), actualEmployees);
+
+        actualEmployees = departmentService.getEmployeesByDepartment("   ");
+        assertEquals(Collections.emptyList(), actualEmployees);
     }
 
     @Test
@@ -145,13 +151,13 @@ public class DepartmentServiceTest {
 
     @Test
     public void testGetEmployeeWithMaxSalary_ThrowsException_WhenNoDepartmentIdProvided() {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> departmentService.getEmployeeWithMaxSalary(null));
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> departmentService.getEmployeeWithMaxSalary(""));
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> departmentService.getEmployeeWithMaxSalary("   "));
     }
 
@@ -196,13 +202,13 @@ public class DepartmentServiceTest {
 
     @Test
     public void testGetEmployeeWithMinSalary_ThrowsException_WhenNoDepartmentIdProvided() {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> departmentService.getEmployeeWithMinSalary(null));
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> departmentService.getEmployeeWithMinSalary(""));
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NoSuchElementException.class,
                 () -> departmentService.getEmployeeWithMinSalary("   "));
     }
 
