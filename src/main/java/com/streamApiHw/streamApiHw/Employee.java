@@ -1,5 +1,7 @@
 package com.streamApiHw.streamApiHw;
 
+import java.util.Objects;
+
 public class Employee {
     private String firstName;
     private String lastName;
@@ -42,5 +44,16 @@ public class Employee {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Employee other = (Employee) obj;
+        return Objects.equals(department, other.department) && Objects.equals(firstName, other.firstName) && Objects.equals(salary, other.salary) && Objects.equals(lastName, other.lastName);
     }
 }

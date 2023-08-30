@@ -1,13 +1,8 @@
 package com.streamApiHw.streamApiHw;
 
-import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
 public class DepartmentService {
     private final EmployeeService employeeService;
 
@@ -15,28 +10,46 @@ public class DepartmentService {
         this.employeeService = employeeService;
     }
 
-    public Employee getEmployeeWithMaxSalaryInDepartment(String departmentId) {
-        List<Employee> employeesInDepartment = employeeService.getEmployeesByDepartment(departmentId);
-        return employeesInDepartment.stream()
-                .max(Comparator.comparingDouble(Employee::getSalary))
-                .orElse(null);
+    public List<Employee> getEmployeesByDepartment(String departmentId) {
+        return employeeService.getAllEmployees().stream()
+                .filter(employee -> employee.getDepartment().equals(departmentId))
+                .collect(Collectors.toList());
     }
 
-    public Employee getEmployeeWithMinSalaryInDepartment(String departmentId) {
-        List<Employee> employeesInDepartment = employeeService.getEmployeesByDepartment(departmentId);
-        return employeesInDepartment.stream()
-                .min(Comparator.comparingDouble(Employee::getSalary))
-                .orElse(null);
+    public double getDepartmentSalarySum(String departmentId) {
+        if (departmentId == null || departmentId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Необходимо предоставить идентификационный номер отдела");
+        }
+        List<Employee> employees = getEmployeesByDepartment(departmentId);
+        return employees.stream()
+                .mapToDouble(Employee::getSalary)
+                .sum();
     }
 
-    public List<Employee> getAllEmployeesInDepartment(String departmentId) {
-        return employeeService.getEmployeesByDepartment(departmentId);
+
+    public Employee getEmployeeWithMaxSalary(String departmentId) {
+        List<Employee> employees = getEmployeesByDepartment(departmentId);
+        if (employees.isEmpty()) {
+            throw new NoSuchElementException("В отделе нет сотрудников");
+        }
+        return employees.stream()
+                .max(Comparator.comparing(Employee::getSalary))
+                .orElseThrow();
     }
 
-    public Map<String, List<Employee>> getAllEmployeesByDepartment() {
-        List<Employee> allEmployees = employeeService.getAllEmployees();
-        return allEmployees.stream()
-                .collect(Collectors.groupingBy(Employee::getDepartment));
+    public Employee getEmployeeWithMinSalary(String departmentId) {
+        List<Employee> employees = getEmployeesByDepartment(departmentId);
+        if (employees.isEmpty()) {
+            throw new NoSuchElementException("В отделе нет сотрудников");
+        }
+        return employees.stream()
+                .min(Comparator.comparing(Employee::getSalary))
+                .orElseThrow();
     }
 
+    public Map<Integer, List<Employee>> getAllEmployeesByDepartment() {
+        List<Employee> employees = employeeService.getAllEmployees();
+        return employees.stream()
+                .collect(Collectors.groupingBy(employee -> employee.getDepartment().hashCode()));
+    }
 }
